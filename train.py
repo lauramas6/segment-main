@@ -10,6 +10,9 @@ from utils.metrics import dice_coef, iou_score  # Stub in metrics.py
 import numpy as np
 from tqdm import tqdm
 
+os.environ["TRANSFORMERS_NO_TF"] = "1"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Optional: makes TF stop printing stuff
+
 # ------------------ CLI ARGUMENTS ------------------
 
 def parse_args():

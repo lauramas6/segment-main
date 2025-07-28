@@ -5,7 +5,9 @@ def get_segformer_model(CFG):
     model = SegformerForSemanticSegmentation.from_pretrained(
         CFG.model_name,
         num_labels=CFG.num_classes,
-        ignore_mismatched_sizes=True
+        ignore_mismatched_sizes=True,
+        trust_remote_code=True,
+        use_safetensors=True
     )
 
     # If we're using non-standard input channels (e.g., 4-channel with thermal)
