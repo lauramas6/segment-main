@@ -1,5 +1,9 @@
 from types import SimpleNamespace
+from models.model_zoo import MODEL_ZOO
 import torch
+
+arch = "segformer"
+defaults = MODEL_ZOO[arch]
 
 CFG = SimpleNamespace(
     # General
@@ -7,17 +11,18 @@ CFG = SimpleNamespace(
     seed = 42,
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
-    # Model (default)
-    architecture = "segformer",
-    model_name = "nvidia/segformer-b2-finetuned-ade-512-512",
-    num_classes = 2,
+    # Model
+    architecture = arch,
+    model_name = defaults["default_model"],
+    num_classes = defaults["num_classes"],
+    in_channels = defaults["in_channels"],
+    trust_remote_code = defaults["trust_remote_code"],
     ignore_index = 255,
     pretrained = True,
     freeze_encoder = False,
 
     # Input
     image_size = (512, 512),
-    in_channels = 3,
 
     # Training
     epochs = 20,
@@ -31,8 +36,8 @@ CFG = SimpleNamespace(
     dice_weight = 0.5,
 
     # Data paths
-    dataset_root = "data",  # default, can be overridden via CLI
-    label_csv = "class_dict.csv",  # class-color mapping CSV inside dataset root
+    dataset_root = "data",
+    label_csv = "class_dict.csv",
 
     # Logging / Outputs
     output_dir = "./results/",
