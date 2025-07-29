@@ -27,16 +27,11 @@ python3 train.py --data_root tomato/segformer --architecture segformer
 ```bash
 python3 evaluate.py --data_root tomato/segformer --architecture segformer --weights weights/your_model.pt
 ```
-Use the dataset formatting utility to prepare your dataset directory structure and ensure compatibility with the model architecture:
-
-```bash
-python3 utils/format_dataset.py --data_root tomato --architecture setr
-```
 ### Current Compatible Architectures:
 Vision Transformers
   - Segformer
   - Mask2Former
-  - SETR
+  - SETR  
 Convolutional Neural Networks
   - ...
   - ...
@@ -48,4 +43,10 @@ Convolutional Neural Networks
 | `--architecture` | Model architecture to use                    | `segformer`, `mask2former`, `setr`      |
 | `--data_root`    | Path to dataset root folder                  | `tomato/segformer`                      |
 | `--weights`      | (Evaluation only) Path to model weights `.pt` file | `weights/best_model.pt`           |
+
+If needed, use the dataset formatting utility to prepare your dataset directory structure and ensure compatibility with the model architecture:
+
+```bash
+python3 utils/format_dataset.py --data_root tomato --architecture setr
+```
 
