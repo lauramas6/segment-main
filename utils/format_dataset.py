@@ -10,7 +10,6 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from models.model_zoo import MODEL_ZOO
 
-
 VALID_IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff"}
 
 def resize_and_copy_image(src_path: Path, dst_path: Path, size):

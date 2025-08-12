@@ -1,4 +1,20 @@
 MODEL_ZOO = {
+    "frrn_a": {
+        "default_model": None,   # local impl
+        "num_classes": 2,
+        "in_channels": 3,
+        "trust_remote_code": False,
+        "image_size": (512, 512),
+        "aliases": ["frrn"],
+    },
+    "fc_densenet103": {
+        "default_model": None,   # local impl
+        "num_classes": 2,
+        "in_channels": 3,
+        "trust_remote_code": False,
+        "image_size": (512, 512),
+        "aliases": ["fcdensenet", "tiramisu"],
+    },
     "segformer": {
         "default_model": "nvidia/segformer-b3-finetuned-ade-512-512",
         "num_classes": 150,
