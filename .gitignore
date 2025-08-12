@@ -43,6 +43,8 @@ data/
 *.zip
 *.tar.gz
 
+classify/cls_data/
+
 tomato/
 almond/
 citrus/
