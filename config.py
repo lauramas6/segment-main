@@ -27,7 +27,7 @@ CFG = SimpleNamespace(
 
     # Training
     epochs=50,
-    batch_size=32,
+    batch_size=16,
     learning_rate=5e-5,
     weight_decay=1e-4,
     val_every=1,

@@ -7,7 +7,7 @@ MODEL_ZOO = {
         "image_size": (512, 512),
         "aliases": ["frrn"],
     },
-    "fc_densenet103": {
+    "fcdensenet": {
         "default_model": None,   # local impl
         "num_classes": 2,
         "in_channels": 3,
