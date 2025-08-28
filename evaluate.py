@@ -19,33 +19,44 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 # ------------------ CLI ARGUMENTS ------------------
 args = parse_args()
 
-# Apply CLI overrides
-if args.architecture:
-    CFG.architecture = args.architecture
-if args.model_name:
-    CFG.model_name = args.model_name
-if args.data_root:
-    CFG.dataset_root = args.data_root
-if args.label_csv:
-    CFG.label_csv = args.label_csv
-if getattr(args, "num_classes", None) is not None:
-    CFG.num_classes = args.num_classes
-if getattr(args, "in_channels", None) is not None:
-    CFG.in_channels = args.in_channels
+# Core
+CFG.architecture = args.architecture
+CFG.model_name = args.model_name
+CFG.dataset_root = args.data_root
+CFG.label_csv = args.label_csv
 
-# Default checkpoint path
-dataset_name = os.path.basename(os.path.normpath(CFG.dataset_root))
-weights_path = os.path.join(
-    CFG.output_dir, dataset_name, CFG.architecture, "checkpoints",
-    f"{dataset_name}_{CFG.architecture}_best.pt"
-)
+# Model-related
+CFG.in_channels = args.in_channels
+CFG.num_classes = args.num_classes
+CFG.freeze_encoder = args.freeze_encoder
+CFG.use_dice_loss = args.use_dice_loss
+CFG.dice_weight = args.dice_weight
 
-print(f"[INFO] Using weights: {weights_path}")
-if not os.path.exists(weights_path):
-    raise FileNotFoundError(f"[ERROR] Checkpoint not found: {weights_path}")
+# Evaluation / Logging
+CFG.save_best_only = args.save_best_only
+CFG.num_eval_samples = args.num_eval_samples
+CFG.show_sample_predictions = args.show_sample_predictions
+
+# Weights handling: prioritize CLI/default, else build dataset-specific path
+if args.weights:
+    CFG.weights = args.weights
+else:
+    dataset_name = os.path.basename(os.path.normpath(CFG.dataset_root))
+    CFG.weights = os.path.join(
+        getattr(CFG, "output_dir", "./results"),  # fallback if not in CFG
+        dataset_name,
+        CFG.architecture,
+        "checkpoints",
+        f"{dataset_name}_{CFG.architecture}_best.pt"
+    )
+
+print(f"[INFO] Using weights: {CFG.weights}")
+if not os.path.exists(CFG.weights):
+    raise FileNotFoundError(f"[ERROR] Checkpoint not found: {CFG.weights}")
+
 
 # ------------------ LOAD CHECKPOINT ------------------
-ckpt = torch.load(weights_path, map_location=CFG.device)
+ckpt = torch.load(CFG.weights, map_location=CFG.device)
 
 # Restore config from checkpoint if available
 if isinstance(ckpt, dict) and "cfg" in ckpt:
@@ -84,6 +95,7 @@ except RuntimeError as e:
 
 print(f"[INFO] Model loaded: {CFG.architecture}")
 model.eval()
+
 
 # ------------------ DATA ------------------
 _, _, test_loader = get_loaders(CFG.dataset_root, CFG.label_csv, include_text=True)

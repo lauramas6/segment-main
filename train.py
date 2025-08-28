@@ -21,13 +21,36 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 # ------------------ CLI ARGUMENTS ------------------
 
-## Here we just parse in the command line arguments and set some of the defaults for our image segmentation pipeline process
-
+## Parse command line arguments and override CFG defaults
 args = parse_args()
+
+# Core
 CFG.architecture = args.architecture
 CFG.model_name = args.model_name
 CFG.dataset_root = args.data_root
 CFG.label_csv = args.label_csv
+
+# Model-related
+CFG.in_channels = args.in_channels
+CFG.num_classes = args.num_classes
+CFG.freeze_encoder = args.freeze_encoder   # bool flag
+CFG.use_dice_loss = args.use_dice_loss     # bool flag
+CFG.dice_weight = args.dice_weight
+
+# Training
+CFG.epochs = args.epochs
+CFG.batch_size = args.batch_size
+CFG.learning_rate = args.learning_rate
+CFG.weight_decay = args.weight_decay
+CFG.val_every = args.val_every
+CFG.patience = args.patience
+
+# Evaluation / Logging
+CFG.save_best_only = args.save_best_only   # bool flag
+CFG.num_eval_samples = args.num_eval_samples
+CFG.show_sample_predictions = args.show_sample_predictions   # bool flag
+CFG.weights = args.weights
+
 
 # ------------------ FORMAT DATASET CHECK ------------------
 
