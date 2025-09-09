@@ -26,12 +26,12 @@ CFG = SimpleNamespace(
     image_size=defaults["image_size"],
 
     # Training
-    epochs=50,
+    epochs=100,
     batch_size=32,
-    learning_rate=5e-5,
+    learning_rate=1e-4,
     weight_decay=1e-4,
     val_every=1,
-    patience=5,
+    patience=7,
 
     # Loss
     use_dice_loss=False,

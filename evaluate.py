@@ -37,15 +37,17 @@ CFG.save_best_only = args.save_best_only
 CFG.num_eval_samples = args.num_eval_samples
 CFG.show_sample_predictions = args.show_sample_predictions
 
+dataset_name = os.path.basename(os.path.normpath(CFG.dataset_root))
+
 if args.weights is not None:
     CFG.weights = args.weights
 else:
     CFG.weights = os.path.join(
         "results",
-        args.data_root,
+        dataset_name,
         args.architecture,
         "checkpoints",
-        f"{args.data_root}_{args.architecture}_best.pt"
+        f"{dataset_name}_{args.architecture}_best.pt"
     )
 
 print(f"[INFO] Using weights: {CFG.weights}")
@@ -112,8 +114,8 @@ palette = load_palette_from_csv(csv_path)
 
 # Output dirs
 today = datetime.now().strftime("%Y-%m-%d")
-mask_dir = os.path.join(CFG.output_dir, CFG.dataset_root, CFG.architecture, today, "masks")
-overlay_dir = os.path.join(CFG.output_dir, CFG.dataset_root, CFG.architecture, today, "overlays")
+mask_dir = os.path.join(CFG.output_dir, dataset_name, CFG.architecture, today, "masks")
+overlay_dir = os.path.join(CFG.output_dir, dataset_name, CFG.architecture, today, "overlays")
 os.makedirs(mask_dir, exist_ok=True)
 os.makedirs(overlay_dir, exist_ok=True)
 
