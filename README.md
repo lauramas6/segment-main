@@ -5,14 +5,15 @@ A modular framework for training and evaluating semantic segmentation models usi
 ---
 
 ### Dataset Requirements (placed within repo root):  
-your_dataset/  
-├── train/  
-├── train_labels/  
-├── val/  
-├── val_labels/  
-├── test/  
-├── test_labels/  
-└── class_dict.csv  
+data/
+├── your_dataset/  
+  ├── train/  
+  ├── train_labels/  
+  ├── val/  
+  ├── val_labels/  
+  ├── test/  
+  ├── test_labels/  
+  └── class_dict.csv  
 
 ## 🚀 Getting Started
 
