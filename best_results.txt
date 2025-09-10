@@ -53,6 +53,8 @@ Recall:    0.7231
 F1 Score:  0.7487
 IoU:       0.6254
 
+________________________________________________________
+
 GENERAL DATASET RESULTS 9/9/2025
 
 Model: mask2former
@@ -63,3 +65,11 @@ Precision: 0.8458
 Recall:    0.7494
 F1 Score:  0.7847
 IoU:       0.6721
+
+Model: setr
+
+Accuracy:  0.8939
+Precision: 0.8475
+Recall:    0.7524
+F1 Score:  0.7875
+IoU:       0.6752
