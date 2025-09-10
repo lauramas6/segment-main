@@ -1,0 +1,65 @@
+For interpreting results:
+Accuracy  - (TP+TN)/(TP+TN+FP+FN) - Fraction of all pixels labeled correctly sunlit or non-sunlit
+Precision - (TP)/(TP+FP)		- Fraction of pixels labeled as sunlit that actually are sunlit (60% means 40% of 'sunlit' labels were incorrect)
+Recall    - (TP)/(TP+FN)		- Fraction of the sunlit pixels (based on our annotations) we identify in the produced mask  - (NOT SUPER IMPORTANT TO GET ACCURATE OVERALL CANOPY TEMPERATURE - Recall has less impact on overall canopy temperature estimates, since missing some sunlit leaves is less critical than mislabeling shaded leaves as sunlit.)
+
+F1 Score is defined as 2*(Precision*Recall)/(Precision+Recall) - attempts to balance precision and recall
+
+IoU (Intersection over Union) - TP/(TP+FP+FN) - Sunlit Leaves correctly identified/All leaves that were labeled sunlit by either human or model produced
+
+Tomato Results 9/9/2025
+[INFO] Model loaded: frrn_a (CNN)
+
+[Evaluation Results]                        Original Results from old paper:
+Accuracy:  0.8499                           .844
+Precision: 0.7894                           .706
+Recall:    0.7190                           .450
+F1 Score:  0.7443                           .550
+IoU:       0.6205                           .604
+
+[INFO] Model loaded: fcdensenet (CNN)
+
+[Evaluation Results]
+Accuracy:  0.8521                           .853
+Precision: 0.7848                           .703
+Recall:    0.7424                           .492
+F1 Score:  0.7599                           .578
+IoU:       0.6364                           .622
+
+[INFO] Model loaded: segformer (ViT)
+
+[Evaluation Results]
+Accuracy:  0.8536                           .840
+Precision: 0.7857                           .670
+Recall:    0.7500                           .476
+F1 Score:  0.7653                           .557
+IoU:       0.6421                           .604
+
+[INFO] Model loaded: mask2former (ViT)
+
+[Evaluation Results]
+Accuracy:  0.8524
+Precision: 0.7796
+Recall:    0.7651
+F1 Score:  0.7719
+IoU:       0.6486
+
+[INFO] Model loaded: setr (ViT)
+
+[Evaluation Results]
+Accuracy:  0.8523
+Precision: 0.7941
+Recall:    0.7231
+F1 Score:  0.7487
+IoU:       0.6254
+
+GENERAL DATASET RESULTS 9/9/2025
+
+Model: mask2former
+
+[Evaluation Results]
+Accuracy:  0.8928
+Precision: 0.8458
+Recall:    0.7494
+F1 Score:  0.7847
+IoU:       0.6721
