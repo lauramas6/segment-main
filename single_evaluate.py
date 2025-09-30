@@ -8,6 +8,7 @@ import torch.nn.functional as F
 import numpy as np
 from PIL import Image
 import cv2
+from datetime import datetime
 
 from config import CFG
 from models.factory import get_model
@@ -27,13 +28,11 @@ from utils.flir_extractor import (
 def parse_args():
     parser = argparse.ArgumentParser(description="Single image evaluation with temperature extraction")
     parser.add_argument("--image_path", type=str, required=True, help="Path to FLIR image")
-    parser.add_argument("--weights", type=str, required=True, help="Checkpoint path")
-    parser.add_argument("--architecture", type=str, required=True)
-    parser.add_argument("--model_name", type=str, required=True)
-    parser.add_argument("--data_root", type=str, required=True)
-    parser.add_argument("--label_csv", type=str, required=True)
+    parser.add_argument("--architecture", type=str, required=True, help="Model architecture")
+    parser.add_argument("--data_root", type=str, required=True, help="Dataset root")
     parser.add_argument("--in_channels", type=int, default=3)
     parser.add_argument("--num_classes", type=int, default=2)
+    parser.add_argument("--weights", type=str, default=None, help="Optional checkpoint path")
     parser.add_argument("--at", type=float, default=30.0, help="Atmospheric temperature for filtering")
     parser.add_argument("--val_sub", type=float, default=0.0, help="Subtract threshold from Ta")
     parser.add_argument("--val_add", type=float, default=0.0, help="Add threshold to Ta")
@@ -45,18 +44,28 @@ def main():
 
     # ------------------ CONFIG ------------------
     CFG.architecture = args.architecture
-    CFG.model_name = args.model_name
     CFG.dataset_root = args.data_root
-    CFG.label_csv = args.label_csv
     CFG.in_channels = args.in_channels
     CFG.num_classes = args.num_classes
-    CFG.weights = args.weights
 
     model_cfg = MODEL_ZOO.get(CFG.architecture, {})
     CFG.image_size = model_cfg.get("image_size", CFG.image_size)
 
+    dataset_name = os.path.basename(os.path.normpath(CFG.dataset_root))
+    if args.weights is not None:
+        CFG.weights = args.weights
+    else:
+        CFG.weights = os.path.join(
+            "results",
+            dataset_name,
+            args.architecture,
+            "checkpoints",
+            f"{dataset_name}_{args.architecture}_best.pt"
+        )
+
+    print(f"[INFO] Using weights: {CFG.weights}")
     if not os.path.exists(CFG.weights):
-        raise FileNotFoundError(f"Checkpoint not found: {CFG.weights}")
+        raise FileNotFoundError(f"[ERROR] Checkpoint not found: {CFG.weights}")
 
     # ------------------ LOAD MODEL ------------------
     ckpt = torch.load(CFG.weights, map_location=CFG.device)
@@ -84,7 +93,6 @@ def main():
         logits = get_logits(model(image_tensor))
         preds = logits.argmax(dim=1).squeeze(0).cpu().numpy()
 
-    # Resize back to original size
     pred_mask = cv2.resize(preds.astype(np.uint8), orig_size, interpolation=cv2.INTER_NEAREST)
 
     # ------------------ LOAD GROUND TRUTH ------------------
@@ -109,8 +117,10 @@ def main():
     print(f"IoU:       {iou:.4f}")
 
     # ------------------ SAVE VISUALS ------------------
-    palette = load_palette_from_csv(os.path.join(CFG.dataset_root, CFG.label_csv))
-    out_dir = os.path.join("outputs", "single_eval")
+    csv_path = os.path.join(CFG.dataset_root, CFG.label_csv)
+    palette = load_palette_from_csv(csv_path) if os.path.exists(csv_path) else None
+    today = datetime.now().strftime("%Y-%m-%d")
+    out_dir = os.path.join("outputs", "single_eval", today)
     os.makedirs(out_dir, exist_ok=True)
     save_mask(pred_mask, os.path.join(out_dir, f"{basename}_mask.png"), palette)
     save_overlay(image_tensor[0], torch.tensor(pred_mask), os.path.join(out_dir, f"{basename}_overlay.png"), palette)
@@ -138,18 +148,18 @@ def main():
         print(f"Min sunlit temp:     {min_temp:.2f} °C")
         print(f"Max sunlit temp:     {max_temp:.2f} °C")
 
-        # Extra: mask overlay + mean temp with thresholds
+        # Filtered temps
         mean_sunlit_temp, temps_masked = crop_mask_and_overlay_temps(
             thermal_np, os.path.join(out_dir, f"{basename}_mask.png"),
-            crop_w=0, crop_h=0,  # cropping offsets not used here
+            crop_w=0, crop_h=0,
             at=args.at, val_sub=args.val_sub, val_add=args.val_add
         )
-        print(f"Filtered mean sunlit temp (thresholded): {mean_sunlit_temp:.2f} °C")
+        print(f"Filtered mean sunlit temp: {mean_sunlit_temp:.2f} °C")
 
-        # Extra: compute CWSI
-        cwsi = calculateCWSI(args.at, avg_temp, float(fie.extracted_metadata['RelativeHumidity']))
+        # Compute CWSI
+        rh = float(fie.extracted_metadata['RelativeHumidity'])
+        cwsi = calculateCWSI(args.at, avg_temp, rh)
         print(f"CWSI: {cwsi:.3f}")
-
     else:
         print("[WARN] No sunlit pixels found.")
 
