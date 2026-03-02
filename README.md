@@ -63,3 +63,9 @@ Convolutional Neural Networks
 | `--show_sample_predictions` | Save sample visual predictions during evaluation                     | `--show_sample_predictions`                 |
 | `--num_eval_samples`  | Number of samples to visualize during evaluation                            | `5`                                         |
 
+### Aknowledgement
+This repository is developed by the CIWA+ team (Fresno State AIIS Lab)
+
+Original Development: Brian Kurzeja [bkur808](https://github.com/bkur808) 
+Current development: Laura MS [lauramas6](https://github.com/lauramas6)
+Main Contributors: Quinten dePfyffer, Alexander Madrigal, Nathaniel Madrigal
