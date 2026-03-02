@@ -91,6 +91,12 @@ def loss_fn(pred, target):
         return ce + CFG.dice_weight * (1 - dice)
     return ce
 
+
+#check
+print(type(model.module))
+print("Number of classes:", CFG.num_classes)
+
+
 # ------------------ TRAINING ------------------
 
 ## For tracking best val loss and patience counter for early stopping 
