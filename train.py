@@ -76,11 +76,11 @@ model = model.to(device)
 train_loader, val_loader = get_loaders(CFG.dataset_root, CFG.label_csv)
 
 # Optimizer
-optimizer = AdamW(model.parameters(), lr=CFG.learning_rate, weight_decay=CFG.weight_decay)
+# optimizer = AdamW(model.parameters(), lr=CFG.learning_rate, weight_decay=CFG.weight_decay)
 
 
 # IF you want to use RMSprop():
-#optimizer = torch.optim.RMSprop(model.parameters(),lr=CFG.learning_rate,alpha=0.995,weight_decay=0.0)
+optimizer = torch.optim.RMSprop(model.parameters(),lr=CFG.learning_rate,alpha=0.995,weight_decay=0.0)
 
 ce_loss = nn.CrossEntropyLoss(ignore_index=CFG.ignore_index)
 
