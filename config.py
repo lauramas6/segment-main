@@ -7,6 +7,9 @@ CFG = SimpleNamespace(
     seed=42,
     device=torch.device('cuda' if torch.cuda.is_available() else 'cpu'),
 
+    # Multi plant model 
+    multi_plant=False,
+
     # Placeholders – must be set by train/evaluate/single_evaluate
     architecture=None,
     model_name=None,

@@ -1,9 +1,12 @@
 import torch.nn as nn
-from torchvision.models.segmentation import deeplabv3_resnet50
+from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
 
 def get_deeplabv3_model(CFG):
     # Load pretrained DeepLabV3 model
-    model = deeplabv3_resnet50(pretrained=True, progress=True, weights=DeepLabV3_ResNet50_Weights.DEFAULT)
+    # model = deeplabv3_resnet50(pretrained=True, progress=True, weights=DeepLabV3_ResNet50_Weights.DEFAULT)
+
+    # new api
+    model = deeplabv3_resnet50(weights=DeepLabV3_ResNet50_Weights.DEFAULT, progress=True)
 
     # Modify the classifier for your number of classes
     model.classifier[4] = nn.Conv2d(256, CFG.num_classes, kernel_size=1)

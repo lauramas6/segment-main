@@ -93,7 +93,7 @@ def loss_fn(pred, target):
 
 
 #check
-print(type(model.module))
+print(type(model.modules))
 print("Number of classes:", CFG.num_classes)
 
 

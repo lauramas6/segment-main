@@ -4,6 +4,8 @@ from config import CFG
 def parse_args():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument("--multi_plant", action="store_true", default=CFG.multi_plant)
+
     # Existing core args
     parser.add_argument("--architecture", type=str, default=CFG.architecture)
     parser.add_argument("--model_name", type=str, default=CFG.model_name)
