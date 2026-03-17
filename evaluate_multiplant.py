@@ -52,6 +52,20 @@ print(f"[INFO] Final eval flags -> "
       f"show_sample_predictions={CFG.show_sample_predictions}, "
       f"num_eval_samples={CFG.num_eval_samples}")
 
+
+    # print(f"Accuracy:  {acc:.4f}")
+    # print(f"Precision: {prec:.4f}")
+    # print(f"Recall:    {rec:.4f}")
+    # print(f"F1 Score:  {f1:.4f}")
+    # print(f"IoU:       {iou:.4f}")
+
+accuracy_list = []
+precision_list = []
+recall_list = []
+f1_list = []
+iou_list = []
+
+
 for plant_root in [d for d in os.listdir("data") if os.path.isdir(os.path.join("data", d))]:
     CFG.dataset_root = plant_root
 
@@ -211,9 +225,22 @@ for plant_root in [d for d in os.listdir("data") if os.path.isdir(os.path.join("
 
     iou = iou_score(all_preds_tensor, all_targets_tensor, effective_num_classes, ignore_index=CFG.ignore_index)
 
-    print("\n[Evaluation Results]")
+    print(f"\n[Evaluation Results - Predict {plant_root}]")
     print(f"Accuracy:  {acc:.4f}")
     print(f"Precision: {prec:.4f}")
     print(f"Recall:    {rec:.4f}")
     print(f"F1 Score:  {f1:.4f}")
-    print(f"IoU:       {iou:.4f}")
+    print(f"IoU:       {iou:.4f}\n")
+
+    accuracy_list.append(acc)
+    precision_list.append(prec)
+    recall_list.append(rec)
+    f1_list.append(f1) 
+    iou_list.append(iou)
+
+print("\n[Average Results - All Plants]")
+print(f"Accuracy:  {np.mean(accuracy_list):.4f} \u00B1 {np.std(accuracy_list):.4f}")
+print(f"Precision: {np.mean(precision_list):.4f} \u00B1 {np.std(precision_list):.4f}")
+print(f"Recall:    {np.mean(recall_list):.4f} \u00B1 {np.std(recall_list):.4f}")
+print(f"F1 Score:  {np.mean(f1_list):.4f} \u00B1 {np.std(f1_list):.4f}")
+print(f"IoU:       {np.mean(iou_list):.4f} \u00B1 {np.std(iou_list):.4f}")

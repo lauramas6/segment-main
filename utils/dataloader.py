@@ -32,8 +32,8 @@ def get_loaders(data_root="data", label_csv="class_dict.csv", include_test_only=
         # print(f"Log: All plants found: {train_plants}")
 
         train_plants.remove(data_root)
-        print(f"Log: Test plant: {data_root}")
-        print(f"Log: Train/Val plants: {train_plants}")
+        # print(f"Log: Test plant: {data_root}")
+        # print(f"Log: Train/Val plants: {train_plants}")
 
 
         train_roots = [os.path.join("data", p) for p in train_plants]
