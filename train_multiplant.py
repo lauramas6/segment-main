@@ -68,12 +68,6 @@ os.makedirs(CFG.output_dir, exist_ok=True)
 
 device = CFG.device
 
-# Enable multi-GPU if available
-if torch.cuda.device_count() > 1:
-    print(f"[INFO] Using {torch.cuda.device_count()} GPUs")
-    model = nn.DataParallel(model)
-
-
 CFG.multi_plant = True
 
 for plant_root in [d for d in os.listdir("data") if os.path.isdir(os.path.join("data", d))]:
@@ -86,6 +80,11 @@ for plant_root in [d for d in os.listdir("data") if os.path.isdir(os.path.join("
     # set up model
     model = get_model()
     model = model.to(device)
+
+    # Enable multi-GPU if available
+    if torch.cuda.device_count() > 1:
+        print(f"[INFO] Using {torch.cuda.device_count()} GPUs")
+        model = nn.DataParallel(model)
 
     # Optimizer
     optimizer = AdamW(model.parameters(), lr=CFG.learning_rate, weight_decay=CFG.weight_decay)
