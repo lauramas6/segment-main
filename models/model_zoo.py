@@ -1,6 +1,6 @@
 MODEL_ZOO = {
     "sam": {
-        "default_model": "facebook/sam-vit-base",
+        "default_model": "facebook/sam3",
         "num_classes": 2,             # adjust if multi-class
         "in_channels": 3,             # RGB input
         "trust_remote_code": True,    # SAM needs remote code
@@ -32,14 +32,7 @@ MODEL_ZOO = {
     },
     "setr": {
         "default_model": "damo/SETR_MLA",
-        "num_classes": 150,
-        "in_channels": 3,
-        "trust_remote_code": True,
-        "image_size": (512, 512),
-    },
-    "mask2former": {
-        "default_model": "facebook/mask2former-swin-large-coco-instance",
-        "num_classes": 150,
+        "num_classes": 2,
         "in_channels": 3,
         "trust_remote_code": True,
         "image_size": (512, 512),
@@ -65,5 +58,21 @@ MODEL_ZOO = {
         "trust_remote_code": True,
         "image_size": (512, 512),
     },
+    "mask2former": {
+        "default_model": "facebook/mask2former-swin-small-ade-semantic",
+        "num_classes": 2,
+        "in_channels": 3,
+        "trust_remote_code": False,
+        "image_size": (518, 518),
+    },
+    "dinov3": {
+        "default_model": "facebook/dinov3-vitb16-pretrain-lvd1689m",
+        "num_classes": 2,
+        "in_channels": 3,
+        "trust_remote_code": False,
+        "image_size": (518, 518),
+        "aliases": ["dinov3b", "dinov3_vitb", "dinov3_base"],
+    },
+    
     # ADD NEW MODEL REQUIREMENTS HERE!
 }

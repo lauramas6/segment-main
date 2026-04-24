@@ -5,8 +5,9 @@ VALID_ARCHS = {
     # ViT-based
     "segformer": "vit.segformer",
     "setr": "vit.setr",
-    "mask2former": "vit.mask2former",
     "sam": "vit.sam",
+    "dinov3": "vit.dinov3",
+    "mask2former": "vit.mask2former",
 
     # CNN-based
     "deeplabv3": "cnn.deeplabv3",
@@ -23,7 +24,11 @@ ALIASES = {
     "frrn": "frrn_a",
     "tiramisu": "fc_densenet103",
     "fc_densenet": "fc_densenet103",
-    "fcdensenet": "fc_densenet103"
+    "fcdensenet": "fc_densenet103",
+    "m2f": "mask2former",
+    "dinov3b": "dinov3",
+    "dinov3_vitb": "dinov3",
+    "dinov3_base": "dinov3",
 }
 
 def _resolve_arch(name: str) -> str:
@@ -41,7 +46,7 @@ def get_model():
     module_path = VALID_ARCHS[arch]
     module = __import__(f"models.{module_path}", fromlist=["get_model_func"])
 
-    func_name = f"get_{arch}_model"  # expects e.g., get_frrn_a_model(CFG)
+    func_name = f"get_{arch}_model"
     if hasattr(module, func_name):
         return getattr(module, func_name)(CFG)
     else:

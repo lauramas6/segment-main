@@ -67,9 +67,9 @@ device = CFG.device
 model = get_model()
 
 # Enable multi-GPU if available
-if torch.cuda.device_count() > 1:
-    print(f"[INFO] Using {torch.cuda.device_count()} GPUs")
-    model = nn.DataParallel(model)
+#if torch.cuda.device_count() > 1:
+    #print(f"[INFO] Using {torch.cuda.device_count()} GPUs")
+    #model = nn.DataParallel(model)
 
 model = model.to(device)
 
@@ -93,7 +93,7 @@ def loss_fn(pred, target):
 
 
 #check
-print(type(model.module))
+#print(type(model.module))
 print("Number of classes:", CFG.num_classes)
 
 
@@ -112,7 +112,7 @@ for epoch in range(CFG.epochs):
     model.train()
     train_loss = []
 
-    for images, masks in tqdm(train_loader, desc=f"[Epoch {epoch+1}/{CFG.epochs}] Training", disable=False):
+    for images, masks, _ in tqdm(train_loader, desc=f"[Epoch {epoch+1}/{CFG.epochs}] Training", disable=False):
         images, masks = images.to(device), masks.to(device)
 
         optimizer.zero_grad()
@@ -131,7 +131,7 @@ for epoch in range(CFG.epochs):
         model.eval()
         val_loss = []
         with torch.no_grad():
-            for images, masks in tqdm(val_loader, desc="Validating", disable=False):
+            for images, masks, _ in tqdm(val_loader, desc="Validating", disable=False):
                 images, masks = images.to(device), masks.to(device)
                 outputs = get_logits(model(images))
                 outputs = nn.functional.interpolate(outputs, size=masks.shape[-2:], mode="bilinear", align_corners=False)
